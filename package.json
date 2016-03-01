@@ -10,7 +10,13 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.13.4",
+    "gulp": "^3.9.1",
     "mysql": "^2.10.2",
     "x-ray": "^2.0.3"
+  },
+  "devDependencies": {
+    "gulp-react": "^3.1.0",
+    "jsx-loader": "^0.13.2",
+    "webpack": "^1.12.14"
   }
 }
