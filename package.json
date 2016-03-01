@@ -4,7 +4,11 @@
   "description": "Fetch, parse, store information about amazon books",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "scrape": "node index.js",
+    "lint": "eslint . --ext .js --ext .jsx"
   },
   "author": "Andrei Oprea",
   "license": "MIT",
@@ -16,7 +20,10 @@
     "x-ray": "^2.0.3"
   },
   "devDependencies": {
+    "eslint": "^2.2.0",
+    "eslint-plugin-react": "^4.1.0",
     "gulp-react": "^3.1.0",
+    "jshint-loader": "^0.8.3",
     "jsx-loader": "^0.13.2",
     "webpack": "^1.12.14"
   }

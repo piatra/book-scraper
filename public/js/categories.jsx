@@ -1,6 +1,6 @@
-var React = require("react");
-var $     = require("jquery");
-var CategoryEntry = require("./categoryEntry.jsx");
+var React = require('react');
+var $     = require('jquery');
+var CategoryEntry = require('./categoryEntry.jsx');
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -23,12 +23,12 @@ module.exports = React.createClass({
       if (categories[c.category]) {
         categories[c.category].push({
           link: '/' + c.category + '/' + c.main_category,
-          title: c.main_category === 1 ? "Books" : "Kindle"
+          title: c.main_category === 1 ? 'Books' : 'Kindle'
         });
       } else {
         categories[c.category] = [{
           link: '/' + c.category + '/' + c.main_category,
-          title: c.main_category === 1 ? "Books" : "Kindle"
+          title: c.main_category === 1 ? 'Books' : 'Kindle'
         }];
       }
     });
@@ -45,7 +45,6 @@ module.exports = React.createClass({
   },
 
   onCategoryExpand: function(id) {
-    console.log("make",id,"active");
     this.setState({
       activeCategoryEntry: id
     });

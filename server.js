@@ -11,7 +11,7 @@ app.get('/', function(req, res) {
 app.get('/books', function(req, res) {
   booksDB.getAllBooks(function(err, resp) {
     if (err) {
-      res.status(500).json({error: error});
+      res.status(500).json({error: err});
     } else {
       res.json({books: resp});
     }

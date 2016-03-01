@@ -1,10 +1,10 @@
-var React = require("react");
-var $     = require("jquery");
+var React = require('react');
+var $     = require('jquery');
 
 module.exports = React.createClass({
   getDefaultProps: function() {
     return {
-      name: "N/A",
+      name: 'N/A',
       types: [],
       active: false
     };

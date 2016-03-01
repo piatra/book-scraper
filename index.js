@@ -22,7 +22,7 @@ function scrapePage() {
       }
 
       noBooks = data.length;
-      console.log("Total books: ", noBooks);
+      console.log('Total books: ', noBooks);
       data.forEach(parseBookPage);
     });
 }
@@ -74,7 +74,7 @@ function parseBookPage(link) {
  * @param [{ content: 'Value' }] rows
  */
 function fetchASIN(rows) {
-  row = rows.filter(function(r) {
+  var row = rows.filter(function(r) {
     return r.content.match('ASIN');
   });
 

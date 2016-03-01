@@ -4,8 +4,8 @@ var pool  = mysql.createPool(require('./dbConfig'));
 // Prevents warning from setting too many event listeners on pool connections.
 require('events').EventEmitter.defaultMaxListeners = Infinity;
 
-booksTableName = 'books2';
-rankTableName  = 'rank3';
+var booksTableName = 'books2';
+var rankTableName  = 'rank3';
 
 /*
  * Genering query function for simple queries.
@@ -85,7 +85,7 @@ module.exports = {
         id: data.asin,
         title: data.title,
         author: data.author
-      }, function(err, id) {
+      }, function(err) {
         if (err) {
           return cb(err);
         }
@@ -95,7 +95,7 @@ module.exports = {
             main_category: rank.main_category === 'Books',
             book_id: data.asin,
             rank: rank.rank.substring(1) // removes # sign
-          }, function(err, result) {
+          }, function(err) {
             if (err) {
               return cb(err);
             }
