@@ -18,7 +18,6 @@ rankTableName  = 'rank3';
 function addBook(book_info, cb) {
   pool.getConnection(function(err, connection) {
     if (err) {
-      connection.release();
       cb(err);
       return;
     }
@@ -33,6 +32,7 @@ function addBook(book_info, cb) {
            [booksTableName, book_info],
            function(err, result) {
              if (err) {
+               console.log("Error inserting", book_info);
                connection.release();
                cb(err);
                return;
@@ -46,7 +46,6 @@ function addBook(book_info, cb) {
 function addRating(book_rating, cb) {
   pool.getConnection(function(err, connection) {
     if (err) {
-      connection.release();
       cb(err);
       return;
     }
@@ -60,6 +59,7 @@ function addRating(book_rating, cb) {
            [rankTableName, book_rating],
            function(err, result) {
              if (err) {
+               console.log("Error inserting", book_rating);
                connection.release();
                cb(err);
              } else {
@@ -128,7 +128,7 @@ module.exports = {
             category: rank.sub_category,
             main_category: rank.main_category === 'Books',
             book_id: data.asin,
-            rank: rank.rank.substring(1)
+            rank: rank.rank.substring(1) // removes # sign
           }, function(err, result) {
             if (err) {
               cb(err);

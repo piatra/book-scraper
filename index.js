@@ -1,46 +1,31 @@
 var booksDB = require('./booksDB');
-
 var SF_BOOKS = 'http://www.amazon.com/Best-Sellers-Kindle-Store-Science-Fiction/zgbs/digital-text/158591011';
-
-//var express = require('express');
-//var app = express();
-
-//app.get('/', function (req, res) {
-  //booksDB.getAllBooks(function(err, data) {
-    //if (err) {
-      //res.end("An error has occured");
-    //} else {
-      //console.log(data);
-      //res.json(data);
-      //res.end();
-    //}
-  //});
-//});
-
-//app.listen(3000, function () {
-  //console.log('Example app listening on port 3000!');
-//});
 
 var xray = require('x-ray');
 var x = xray();
 var noBooks;
 
 function scrapePage() {
-  x(SF_BOOKS, '.zg_title a', [{ title: '@href' }])
-    .paginate('.zg_page.zg_selected+.zg_page a@href')
+  x(SF_BOOKS, {
+    items: x('.zg_itemWrapper', [{
+        href: x('.zg_title a', '@href'),
+        author: x('.zg_byline', '')
+    }])
+  }).paginate('.zg_page.zg_selected+.zg_page a@href')
     .limit(1)(function(err, data) {
       if (err) {
         console.log(err);
         return;
       }
 
-      noBooks = data.length;
-      data.forEach(parseBookPage);
+      noBooks = data[0].items.length;
+      data[0].items.forEach(parseBookPage);
     });
 }
 
 function parseBookPage(link) {
-  var href = link.title.replace(/\r?\n|\r/g, '');
+  var href   = link.href.trim();
+  var author = link.author.trim();
   x(href, 'body', {
       title: '#ebooksProductTitle',
       asin: x('#productDetailsTable .content ul', 'li', [
@@ -48,7 +33,6 @@ function parseBookPage(link) {
           content: ''
         }
       ]),
-      author: '#byline .contributorNameID',
       overall_rank: x('#SalesRank', ''),
       ranks: x('#SalesRank', 'li:nth-child(n+2)', [
         {
@@ -57,26 +41,25 @@ function parseBookPage(link) {
           sub_category: '.zg_hrsr_ladder b'
         }
       ])
-    })(function(err, data) {
-    var i;
-
+  })(function(err, data) {
     if (err) {
       console.log(err);
-      return;
-    }
-
-    data.overall_rank = data.overall_rank.match(/\d+/)[0];
-    data.asin         = fetchASIN(data.asin);
-    booksDB.insertBook(data, function(err) {
-      if (err) {
-        console.log(err);
-      }
-      if (--noBooks === 0) {
-        booksDB.close(function(err) {
+    } else {
+      data.overall_rank = data.overall_rank.match(/\d+/)[0];
+      data.asin         = fetchASIN(data.asin);
+      data.author       = author.substring(3);
+      console.log(data);
+      booksDB.insertBook(data, function(err) {
+        if (err) {
           console.log(err);
-        });
-      }
-    });
+        }
+        if (--noBooks === 0) {
+          booksDB.close(function(err) {
+            console.log(err);
+          });
+        }
+      });
+    }
   });
 }
 
