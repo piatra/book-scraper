@@ -70,6 +70,25 @@ function addRating(book_rating, cb) {
   });
 }
 
+function queryDBGenerator(cb, query, payload) {
+  pool.getConnection(function(err, connection) {
+    if (err) {
+      connection.release();
+      cb(err);
+      return;
+    }
+    connection.query(query, payload, function(err, rows) {
+      connection.release();
+      cb(err, rows);
+    });
+
+    connection.on('error', function(err) {
+      connection.release();
+      cb(err);
+    });
+  });
+}
+
 module.exports = {
   getAllBooks: function(cb) {
     pool.getConnection(function(err, connection) {
@@ -88,6 +107,18 @@ module.exports = {
         cb(err);
       });
     });
+  },
+
+  getAllCategories: function(cb) {
+    queryDBGenerator(cb,
+      'SELECT category, main_category FROM ?? GROUP BY category, main_category',
+      rankTableName);
+  },
+
+  getTopInCategory: function(cb, category, main_category, limit) {
+    queryDBGenerator(cb,
+      'SELECT * FROM ?? b INNER JOIN (SELECT book_id, rank FROM ?? WHERE category = ? AND main_category = ? LIMIT ?) q on b.id = q.book_id',
+      [booksTableName, rankTableName, category, main_category, limit]);
   },
 
   emptyTables: function(cb) {

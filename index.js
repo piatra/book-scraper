@@ -6,20 +6,19 @@ var x = xray();
 var noBooks;
 
 function scrapePage() {
-  x(SF_BOOKS, {
-    items: x('.zg_itemWrapper', [{
-        href: x('.zg_title a', '@href'),
-        author: x('.zg_byline', '')
-    }])
-  }).paginate('.zg_page.zg_selected+.zg_page a@href')
-    .limit(1)(function(err, data) {
+  x(SF_BOOKS, '.zg_itemWrapper', [{
+    href: x('.zg_title a', '@href'),
+    author: x('.zg_byline', '')
+  }]).paginate('.zg_page.zg_selected+.zg_page a@href')
+    .limit(10)(function(err, data) {
       if (err) {
         console.log(err);
         return;
       }
 
-      noBooks = data[0].items.length;
-      data[0].items.forEach(parseBookPage);
+      noBooks = data.length;
+      console.log("Total books: ", noBooks);
+      data.forEach(parseBookPage);
     });
 }
 
@@ -48,7 +47,6 @@ function parseBookPage(link) {
       data.overall_rank = data.overall_rank.match(/\d+/)[0];
       data.asin         = fetchASIN(data.asin);
       data.author       = author.substring(3);
-      console.log(data);
       booksDB.insertBook(data, function(err) {
         if (err) {
           console.log(err);
@@ -57,6 +55,8 @@ function parseBookPage(link) {
           booksDB.close(function(err) {
             console.log(err);
           });
+        } else {
+          console.log(noBooks);
         }
       });
     }

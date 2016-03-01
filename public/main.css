@@ -1,0 +1,22 @@
+body {
+  font-size: 16px;
+  background: #f5f5f5;
+  color: #222;
+}
+
+.category-container {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.category-container__entry {
+  padding: .5rem;
+  margin: .2rem;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+a {
+  margin: 0 .2rem;
+}

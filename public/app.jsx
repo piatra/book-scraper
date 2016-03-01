@@ -1,9 +1,12 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var Categories = require('./categories.jsx');
 
 var HelloMessage = React.createClass({
   render: function() {
-    return <div>Hello {this.props.name}</div>;
+    return <div>
+      <Categories />
+    </div>;
   }
 });
 
