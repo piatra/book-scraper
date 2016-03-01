@@ -9,6 +9,7 @@
   "author": "Andrei Oprea",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.13.4",
     "mysql": "^2.10.2",
     "x-ray": "^2.0.3"
   }
