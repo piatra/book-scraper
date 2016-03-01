@@ -1,8 +1,8 @@
 module.exports = {
   cache: true,
-  entry: './public/app.jsx',
+  entry: './public/js/app.jsx',
   output: {
-    filename: './public/browser-bundle.js'
+    filename: './public/js/browser-bundle.js'
   },
   module: {
     loaders: [
