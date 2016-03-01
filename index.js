@@ -3,8 +3,13 @@ var SF_BOOKS = 'http://www.amazon.com/Best-Sellers-Kindle-Store-Science-Fiction/
 
 var xray = require('x-ray');
 var x = xray();
+// Number of books that will be added to the database.
+// Used to signal when it is safe to close the DB connection.
 var noBooks;
 
+/*
+ * Scrape the pages.
+ */
 function scrapePage() {
   x(SF_BOOKS, '.zg_itemWrapper', [{
     href: x('.zg_title a', '@href'),
@@ -23,7 +28,7 @@ function scrapePage() {
 }
 
 function parseBookPage(link) {
-  var href   = link.href.trim();
+  var href   = link.href.trim(); // remove \n from links
   var author = link.author.trim();
   x(href, 'body', {
       title: '#ebooksProductTitle',
@@ -46,7 +51,7 @@ function parseBookPage(link) {
     } else {
       data.overall_rank = data.overall_rank.match(/\d+/)[0];
       data.asin         = fetchASIN(data.asin);
-      data.author       = author.substring(3);
+      data.author       = author.substring(3); // removes 'by '
       booksDB.insertBook(data, function(err) {
         if (err) {
           console.log(err);
@@ -73,9 +78,13 @@ function fetchASIN(rows) {
     return r.content.match('ASIN');
   });
 
+  // ASIN: B01BKWKBCS, get just the ASIN value.
   return row[0].content.split(' ')[1];
 }
 
+/*
+ * Empty the database before fetching new info.
+ */
 booksDB.emptyTables(function(err) {
   if (!err) {
     scrapePage();
