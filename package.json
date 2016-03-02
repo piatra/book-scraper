@@ -14,7 +14,6 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.13.4",
-    "gulp": "^3.9.1",
     "jquery": "^2.2.1",
     "mysql": "^2.10.2",
     "x-ray": "^2.0.3"
